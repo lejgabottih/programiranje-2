@@ -6,13 +6,30 @@ use core::panic;
 
 /// Napišite funkcijo `fib`, ki sprejme začetna člena fibbonacijevega zaporedja, število `n` in vrne `n`-ti člen zaporedja
 
+// fn fib(a0: u32, a1: u32, n: u32) -> u32 {
+//     if n == 0 {
+//         return a0;
+//     } else if n == 1 {
+//         return a1;
+//     } return fib(a1, a0 + a1, n - 1);
+// }
+
 fn fib(a0: u32, a1: u32, n: u32) -> u32 {
-    panic!("Not implemented");
+    let mut a = a0;
+    let mut b = a1;
+    for _ in 0..n {
+        (a, b) = (b, a + b)
+    }
+    return a;
 }
 
 /// ------------------------------------------------------------------------------------------------
 
 /// Napišite funkcijo `je_prestopno`, ki za podano leto preveri, ali je prestopno
+
+fn je_prestopno(leto: u32) -> bool {
+    (leto % 4 == 0 && leto % 100 != 0) || (leto % 400 == 0)
+}
 
 /// ------------------------------------------------------------------------------------------------
 
@@ -21,13 +38,42 @@ fn fib(a0: u32, a1: u32, n: u32) -> u32 {
 // Dan, mesec, leto
 type Date = (u32, u32, u32);
 
+fn je_veljaven_datum(datum: Date) -> bool {
+        match datum.1 {
+            1 | 3 | 5 | 7 | 8 | 10 | 12 => {
+                if datum.0 <= 31 {
+                    return true;
+                } else {return false}
+            }
+            4 | 6 | 9 | 11 => {
+                if datum.0 <= 30 {
+                    return true;
+                } else {return false}
+            }
+            2 => { if je_prestopno(datum.2) == true {
+                if datum.0 <= 29 {
+                    return true;
+                } else {return false}
+            } else if datum.0 <= 28 {
+                return true;
+            } else {return false}
+            }
+            _ => {return false}
+            }
+        } 
+
+
+
+
 /// ------------------------------------------------------------------------------------------------
 
 /// Napišite funkcijo `iteracija(mut start: u32, fun: fn(u32) -> u32, cond: fn(u32) -> bool) -> u32`, ki sprejme iteracijsko funkcijo, zaustavitveni pogoj in začetno vrednost.
 /// Iteracijsko funkcijo zaporedoma uporablja, dokler za rezultat ne velja zaustavitveni pogoj, in vrne prvi rezultat, ki zadošča zaustavitvenemu pogoju.
 
 fn iteracija(mut start: u32, fun: fn(u32) -> u32, cond: fn(u32) -> bool) -> u32 {
-    panic!("Not implemented");
+    if cond(start) {
+        return start;
+    } else {return iteracija(fun(start), fun, cond)};
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -41,7 +87,21 @@ fn iteracija(mut start: u32, fun: fn(u32) -> u32, cond: fn(u32) -> bool) -> u32 
 /// 5. Ponavljamo korake 2-4
 
 fn bisekcija(mut a: f64, mut b: f64, fun: fn(f64) -> f64, prec: f64) -> f64 {
-    panic!("Not implemented");
+    if fun(a) == 0.0 {
+        return a
+    } else
+    if fun(b) == 0.0 {
+        return b
+    } else
+    if fun(a) * fun(b) < 0.0 {
+        let c = (a+b)/2.0;
+        if fun(c).abs() < prec {
+            return c;
+        } else {if fun(a) * fun(c) <= 0.0 {
+            return bisekcija(a, c, fun, prec);
+        } else {return bisekcija(b, c, fun, prec);}
+    }
+    } else {panic!("nema ništa")}
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -50,7 +110,24 @@ fn bisekcija(mut a: f64, mut b: f64, fun: fn(f64) -> f64, prec: f64) -> f64 {
 /// Uporabnika sprašujemo po novi številki, vse dokler so števila, ki jih vpisuje del nekega aritmetičnega zaporedja
 /// Če uporabnik vpiše neveljavno število to ni napaka, program za pogoj aritmetičnega zaporedja upošteva samo veljavno vpisana števila.
 
+use std::io;
+
 fn guessing_game() {
+
+    // loop {
+    //     println!("napiši naslednje število")
+
+    //     let mut guess = String.new()
+
+    //     io::stdin()
+    //         .read_line(&mut guess)
+    //         .expect("Failed to read line");
+
+        
+
+    // }
+
+
     panic!("Not implemented");
 }
 
@@ -114,7 +191,10 @@ fn pyramid(n: u32) {
 /// A B C D C B A
 /// Napišite funkcijo `fn selection_sort(mut arr: [u32])`, ki uredi tabelo `arr` z uporabo algoritma urejanja z izbiranjem
 
-fn main() {}
+fn main() {
+    fn f(x: f64) -> f64 { return x.sin()};
+    println!("{}", bisekcija(0.0, 1.0, f, 0.0000001 ))
+}
 
 #[cfg(test)]
 mod tests {
