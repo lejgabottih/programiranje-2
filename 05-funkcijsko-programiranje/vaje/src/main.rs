@@ -7,6 +7,72 @@
 //  ponavljaj: int -> ('a -> 'a) -> 'a -> 'a // Ponovi funkcijo n-krat
 //  filter: ('a -> bool) -> 'a list -> 'a list // Vrne seznam elementov, ki zadoščajo pogoju - uporabite Vec<T> namesto list in že vgrajeno funkcijo filter
 
+use std::net::UdpSocket;
+
+
+fn apply_int<T>(fun: T, n: i64) -> i64
+    where T: Fn(i64) -> i64
+    {
+        return fun(n)
+    }
+
+fn apply_int_dyn(fun: &dyn Fn(i64) -> i64, n: i64) -> i64
+    {
+        return fun(n)
+    }
+
+//ce impl pri fun: impl v funkciji notr lahka tut &dyn...
+// potem je treba pri &dyn borrowat spremenljivko
+
+fn apply<T, U, V>(fun: T, x: U) -> V
+    where T: Fn(U) -> V
+    {
+            return fun(x)
+    }
+
+fn apply2<T, U, V>(fun: T, x: U, y: U) -> V
+    where T: Fn(U, U) -> V
+    {
+        return fun(x, y)
+    }
+
+fn map<F, T, U>(fun: F, vec: Vec<T>) -> Vec<U> 
+    where F: Fn(T) -> U
+    {
+        let mut nov = Vec::<U>::new();
+        for x in vec {
+            nov.push(fun(x))
+        } 
+        return nov
+    }
+
+fn ponavljaj<F, U>(n: i64, fun: F, a: U) -> U
+    where F: Fn(U) -> U
+    {
+        let mut odg = a;
+        for _ in 0..n {
+            odg = fun(odg);
+        }
+        return odg
+    }
+
+fn filter<F, U>(fun: F, vec: Vec<U>) -> Vec<U>
+    where F: FnMut(&U) -> bool
+    {
+        return vec.into_iter().filter(fun).collect();
+    }
+
+
+
+
+fn  main() {
+    let f = |x: &i64| { *x <= 3};
+    // let g = |x: i64| {x * 10};
+    // let fncs = vec![f, g];
+    println!("{:?}", filter(f, vec![5,4,6,3,7,2,9,1]));
+}
+
+
 // Vzemite zaporedja iz prejšnjih vaj in naredite nov objekt, ki sprejme zaporedje in ga naredi iterabilnega
 
 // Iteratorji
@@ -82,3 +148,6 @@ fn test_degenerate_cases() {
 
 
 */
+
+
+
